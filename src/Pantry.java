@@ -24,7 +24,15 @@ public class Pantry {
                 return true;
             }
         }
-        System.out.println("Dodaję produkt");
+        return false;
+    }
+
+    boolean isProductInLocation(String productName, String location) {
+        for (ProductStorage productStorage : productStorages) {
+            if (productStorage.product.name.equals(productName) && productStorage.storageLocation.name.equals(location)) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -35,7 +43,9 @@ public class Pantry {
     }
 
     void addProductStorage (Product product, StorageLocation storageLocation) {
-        productStorages.add(new ProductStorage(product, storageLocation, true));
+        if (!isProductInLocation(product.name, storageLocation.name)){
+            productStorages.add(new ProductStorage(product, storageLocation, true));
+        }
     }
 
     StorageLocation getStorageLocation (int storageLocation) {
