@@ -78,6 +78,13 @@ public class Pantry {
         }
     }
 
+    void markAsUnavailable (Product product, StorageLocation storageLocation) {
+        productStorages.stream()
+                .filter( ps -> ps.product.name.equals(product.name) && ps.storageLocation.name.equals(storageLocation.name))
+                .findFirst()
+                .ifPresent(ps -> ps.available = false);
+    }
+
     public static void main (String[] args){
         Pantry pantry = new Pantry();
         Scanner scanner = new Scanner(System.in);
