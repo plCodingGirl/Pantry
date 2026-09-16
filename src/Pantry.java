@@ -52,22 +52,36 @@ public class Pantry {
         return storageLocations.get(storageLocation-1);
     }
 
+    Product getProduct (int product) {
+        return products.get(product-1);
+    }
+
     int getProductCount() {
         return products.size();
     }
 
-    void showProducts() {
+    void showProductsAndCategories() {
         System.out.println("Produkty w Twojej spiżarni");
         for (Product product : products) {
             System.out.println("Produkt " + product.name + " Kategoria " + product.category);
         }
     }
 
+    void showProducts() {
+        System.out.println("Produkty w Twojej spiżarni");
+        for (int i = 0; i < products.size(); i++) {
+            Product product = products.get(i);
+            System.out.println((i + 1) + " - Produkt " + product.name);
+        }
+    }
+
     void showProductsWithLocations() {
         System.out.println("Produkty w Twojej spiżarni i ich lokalizacja:");
         for (ProductStorage productStorage : productStorages) {
-            System.out.println("Produkt " + productStorage.product.name + " Kategoria " +productStorage.product.category
-                                + " Lokalizacja " + productStorage.storageLocation);
+            if (productStorage.available){
+                System.out.println("Produkt " + productStorage.product.name + " Kategoria " +productStorage.product.category
+                        + " Lokalizacja " + productStorage.storageLocation);
+            }
         }
     }
 
@@ -108,12 +122,28 @@ public class Pantry {
         System.out.println(""" 
                 Wybierz 1 lub 2:
                 1 - Dodaj kolejny produkt
-                2 - Zakończ 
+                2 - Zużyj produkt 
+                3 - Zakończ
                 """);
+        switch (scanner.nextLine()) {
+            case "2":
+                int productToConsume;
+                int storageLocationToConsume;
+
+                System.out.println("Zużywam produkt - podaj produkt");
+                pantry.showProducts();
+                productToConsume = Integer.parseInt(scanner.nextLine());
+                System.out.println("Zużywam produkt - podaj lokalizacje produktu");
+                pantry.showStorageLocations();
+                storageLocationToConsume = Integer.parseInt(scanner.nextLine());
+
+                pantry.markAsUnavailable(pantry.getProduct(productToConsume), pantry.getStorageLocation(storageLocationToConsume));
+                break;
+        }
     } while (scanner.nextLine().equals("1"));
 
         System.out.println("Ilość produktów w Twojej spiżarni to " + pantry.getProductCount());
-        pantry.showProducts();
+        pantry.showProductsAndCategories();
         pantry.showProductsWithLocations();
         }
 }
