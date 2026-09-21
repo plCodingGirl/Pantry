@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Pantry {
     List <Product> products;
-    //List <Category> categories;
     List <StorageLocation> storageLocations;
     List <ProductStorage> productStorages;
 
@@ -14,7 +13,6 @@ public class Pantry {
         storageLocations.add(new StorageLocation("Regał - Półka 1"));
         storageLocations.add(new StorageLocation("Regał - Półka 2"));
         storageLocations.add(new StorageLocation("Kuchnia - Szuflada A4"));
-        //categories = new ArrayList<>();
         productStorages = new ArrayList<>();
     }
 
@@ -102,45 +100,52 @@ public class Pantry {
     public static void main (String[] args){
         Pantry pantry = new Pantry();
         Scanner scanner = new Scanner(System.in);
-        String productName;
-        String categoryName;
-        Product product;
-        int storageLocation;
+        String choose;
 
-    do {
-        System.out.println("Dodaj nowy produkt");
-        productName = scanner.nextLine();
-        System.out.println("Podaj kategorie produktu");
-        categoryName = scanner.nextLine();
-        product = new Product(productName, new Category(categoryName));
-        pantry.addProduct(product);
-
-        pantry.showStorageLocations();
-        storageLocation = Integer.parseInt(scanner.nextLine());
-        pantry.addProductStorage(product, pantry.getStorageLocation(storageLocation));
-
-        System.out.println(""" 
+        do {
+            System.out.println(""" 
                 Wybierz 1 lub 2:
                 1 - Dodaj kolejny produkt
                 2 - Zużyj produkt 
                 3 - Zakończ
                 """);
-        switch (scanner.nextLine()) {
-            case "2":
-                int productToConsume;
-                int storageLocationToConsume;
+            choose = scanner.nextLine();
 
-                System.out.println("Zużywam produkt - podaj produkt");
-                pantry.showProducts();
-                productToConsume = Integer.parseInt(scanner.nextLine());
-                System.out.println("Zużywam produkt - podaj lokalizacje produktu");
-                pantry.showStorageLocations();
-                storageLocationToConsume = Integer.parseInt(scanner.nextLine());
+            switch (choose) {
+                case "1":
+                    System.out.println("Dodaj nowy produkt");
+                    String productName = scanner.nextLine();
+                    System.out.println("Podaj kategorie produktu");
+                    String categoryName = scanner.nextLine();
+                    Product product = new Product(productName, new Category(categoryName));
+                    pantry.addProduct(product);
 
-                pantry.markAsUnavailable(pantry.getProduct(productToConsume), pantry.getStorageLocation(storageLocationToConsume));
-                break;
-        }
-    } while (scanner.nextLine().equals("1"));
+                    pantry.showStorageLocations();
+                    System.out.println("Wybierz numer lokalizacji:");
+                    int storageLocation = Integer.parseInt(scanner.nextLine());
+                    pantry.addProductStorage(product, pantry.getStorageLocation(storageLocation));
+                    break;
+                case "2":
+                    System.out.println("Zużywam produkt - podaj produkt");
+                    pantry.showProducts();
+                    int productToConsume = Integer.parseInt(scanner.nextLine());
+
+                    System.out.println("Zużywam produkt - podaj lokalizacje produktu");
+                    pantry.showStorageLocations();
+                    int storageLocationToConsume = Integer.parseInt(scanner.nextLine());
+
+                    pantry.markAsUnavailable(pantry.getProduct(productToConsume), pantry.getStorageLocation(storageLocationToConsume));
+                    System.out.println("Produkt został zużyty");
+                    break;
+                case "3":
+                    System.out.println("Kończymy działanie programu");
+                    break;
+
+                default:
+                    System.out.println("Nieznana opcja, spróbuj ponownie");
+
+            }
+        } while (!choose.equals("3"));
 
         System.out.println("Ilość produktów w Twojej spiżarni to " + pantry.getProductCount());
         pantry.showProductsAndCategories();
