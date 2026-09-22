@@ -83,6 +83,16 @@ public class Pantry {
         }
     }
 
+    void showShoppingList() {
+        System.out.println("Lista zakupów:");
+
+        productStorages.stream()
+                .filter(ps -> !ps.available)
+                .map(ps -> ps.product.name)
+                .distinct()
+                .forEach(System.out::println);
+    }
+
     void showStorageLocations() {
         System.out.println("Dostępne miejsca:");
         for (StorageLocation storageLocation : storageLocations) {
@@ -97,17 +107,17 @@ public class Pantry {
                 .ifPresent(ps -> ps.available = false);
     }
 
-    public static void main (String[] args){
+    public static void main (String[] args) {
         Pantry pantry = new Pantry();
         Scanner scanner = new Scanner(System.in);
         String choose;
 
         do {
-            System.out.println(""" 
-                Wybierz 1 lub 2:
+            System.out.println("""
                 1 - Dodaj kolejny produkt
-                2 - Zużyj produkt 
-                3 - Zakończ
+                2 - Zużyj produkt
+                3 - Pokaż listę zakupów
+                4 - Zakończ
                 """);
             choose = scanner.nextLine();
 
@@ -138,9 +148,11 @@ public class Pantry {
                     System.out.println("Produkt został zużyty");
                     break;
                 case "3":
+                    pantry.showShoppingList();
+                    break;
+                case "4":
                     System.out.println("Kończymy działanie programu");
                     break;
-
                 default:
                     System.out.println("Nieznana opcja, spróbuj ponownie");
 
