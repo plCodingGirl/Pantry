@@ -54,9 +54,9 @@ public class Pantry {
         return products.get(product-1);
     }
 
-    int getProductCount() {
-        return products.size();
-    }
+    //int getProductCount() {
+    //    return products.size();
+    //}
 
     void showProductsAndCategories() {
         System.out.println("Produkty w Twojej spiżarni");
@@ -93,6 +93,16 @@ public class Pantry {
                 .forEach(System.out::println);
     }
 
+    void showProductsByCategory(String category) {
+        System.out.println("Produkty z kategorii: " + category);
+
+        productStorages.stream()
+                .filter(ps -> ps.available && ps.product.category.name.equals(category))
+                .map(ps -> ps.product.name)
+                .distinct()
+                .forEach(System.out::println);
+    }
+
     void showStorageLocations() {
         System.out.println("Dostępne miejsca:");
         for (StorageLocation storageLocation : storageLocations) {
@@ -108,6 +118,8 @@ public class Pantry {
     }
 
     public static void main (String[] args) {
+        DatabaseManager dbManager = new DatabaseManager();
+        dbManager.initializeDatabase();
         Pantry pantry = new Pantry();
         Scanner scanner = new Scanner(System.in);
         String choose;
@@ -159,7 +171,6 @@ public class Pantry {
             }
         } while (!choose.equals("3"));
 
-        System.out.println("Ilość produktów w Twojej spiżarni to " + pantry.getProductCount());
         pantry.showProductsAndCategories();
         pantry.showProductsWithLocations();
         }
