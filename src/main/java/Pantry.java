@@ -145,7 +145,7 @@ public class Pantry {
                     System.out.println("Wybierz numer lokalizacji:");
                     int storageLocation = Integer.parseInt(scanner.nextLine());
 
-                    String mappedLocationName = storageLocations.get(storageLocation - 1).name;
+                    String mappedLocationName = pantry.storageLocations.get(storageLocation - 1).name;
                     dbManager.addProductToDatabase(productName, categoryName, mappedLocationName);
                     break;
 
