@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class Pantry {
     List <Product> products;
-    List <StorageLocation> storageLocations;
     List <ProductStorage> productStorages;
+    List <StorageLocation> storageLocations;
 
     public Pantry() {
         products = new ArrayList<>();
@@ -13,6 +13,7 @@ public class Pantry {
         storageLocations.add(new StorageLocation("Regał - Półka 1"));
         storageLocations.add(new StorageLocation("Regał - Półka 2"));
         storageLocations.add(new StorageLocation("Kuchnia - Szuflada A4"));
+
         productStorages = new ArrayList<>();
     }
 
@@ -53,10 +54,6 @@ public class Pantry {
     Product getProduct (int product) {
         return products.get(product-1);
     }
-
-    //int getProductCount() {
-    //    return products.size();
-    //}
 
     void showProductsAndCategories() {
         System.out.println("Produkty w Twojej spiżarni");
@@ -120,6 +117,7 @@ public class Pantry {
     public static void main (String[] args) {
         DatabaseManager dbManager = new DatabaseManager();
         dbManager.initializeDatabase();
+        dbManager.showProductsFromDatabase();
         Pantry pantry = new Pantry();
         Scanner scanner = new Scanner(System.in);
         String choose;
@@ -139,14 +137,18 @@ public class Pantry {
                     String productName = scanner.nextLine();
                     System.out.println("Podaj kategorie produktu");
                     String categoryName = scanner.nextLine();
+
                     Product product = new Product(productName, new Category(categoryName));
                     pantry.addProduct(product);
-
                     pantry.showStorageLocations();
+
                     System.out.println("Wybierz numer lokalizacji:");
                     int storageLocation = Integer.parseInt(scanner.nextLine());
-                    pantry.addProductStorage(product, pantry.getStorageLocation(storageLocation));
+
+                    String mappedLocationName = storageLocations.get(storageLocation - 1).name;
+                    dbManager.addProductToDatabase(productName, categoryName, mappedLocationName);
                     break;
+
                 case "2":
                     System.out.println("Zużywam produkt - podaj produkt");
                     pantry.showProducts();
